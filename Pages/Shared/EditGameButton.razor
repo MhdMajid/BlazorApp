@@ -1,0 +1,15 @@
+﻿@inject NavigationManager _nav
+
+
+<button @onclick="EditGmae" class="btn btn-primary">Edit Game</button>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    public void EditGmae()
+    {
+
+        _nav.NavigateTo($"/edit-game/{Id}");
+    }
+}

@@ -1,0 +1,49 @@
+﻿@page "/edit-game"
+@page "/edit-game/{id:int}"
+@inject IGameService _IGame
+@inject NavigationManager _nav
+
+@if(Id == null){
+    <PageTitle>Create Game</PageTitle>
+    <h3>CreateGame</h3>
+}
+else
+{
+    <PageTitle>Edite Game</PageTitle>
+    <h3>Edit @game.Name </h3>
+}
+
+<EditForm Model="game" OnSubmit="HandleSubmut" >
+    <label>Name</label>
+    <InputText @bind-Value="game.Name">@game.Name</InputText>
+    <button type="submit" class="btn btn-primary">Submit</button>
+    @if(Id != null)
+    {
+        <button @onclick="DeleteGame" type="button" class="btn btn-danger ">Delete</button>
+    }
+</EditForm>
+
+
+@code {
+    [Parameter]
+    public int? Id { get; set; }
+
+    Entity.Game game { get; set; } = new Entity.Game { Name = String.Empty };
+
+    async Task HandleSubmut()
+    {
+        if (Id == null)
+        {
+            await _IGame.AddGame(game);
+        }
+        else
+        {
+            await _IGame.EditGame((int)Id , game);
+        }
+
+        _nav.NavigateTo("/Games");
+    }
+    async Task DeleteGame() => await _IGame.DeleteGame((int)Id);
+
+    protected override async Task OnParametersSetAsync() => game = await _IGame.GetGameById((int)Id);
+}

@@ -1,0 +1,12 @@
+﻿@inject NavigationManager _nav
+
+
+<button @onclick="CreatGmae" class="btn btn-primary">Create Game</button>
+
+@code {
+    public void CreatGmae()
+    {
+
+        _nav.NavigateTo("/edit-game");
+    }
+}

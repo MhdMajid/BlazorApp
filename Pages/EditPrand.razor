@@ -1,0 +1,54 @@
+﻿@page "/EditPrand/{id:int}"
+@inject IPrandService _IPrand
+@inject NavigationManager _nav
+<h3>EditPrand</h3>
+@if (prandById == null)
+{
+    <h1>Loading...</h1>
+}
+else
+{
+<EditForm Model="pr" OnSubmit="HandleSubmit">
+    <label>Name</label>
+        <InputText @bind-Value="@prandById.Name">@prandById.Name</InputText>
+    <label>City</label>
+        <InputText @bind-Value="@prandById.Name">@prandById.City</InputText>
+    <button type="submit" class="btn btn-success">Edit</button>
+</EditForm>
+
+}
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    Entity.Prand prandById = new Entity.Prand();
+    //run before rendering
+    protected async override Task OnInitializedAsync()
+    {
+        prandById = await _IPrand.GetPrandByID(Id);
+
+    }
+    Entity.Prand pr { get; set; } = new Entity.Prand { Name = string.Empty, City = string.Empty };
+    // Entity.Prand pr { get; set; } = new Entity.Prand { Name = prandById.Name, City = prandById.City };
+
+
+    // run after rendering
+    // protected override void OnAfterRender(bool firstRender)
+    // {
+    //     base.OnAfterRender(firstRender);
+    // }
+
+    async Task HandleSubmit()
+    {
+        pr.Name = prandById.Name;
+        pr.City = prandById.City;
+
+        if(pr != null)
+        {
+            await _IPrand.EditPrand(Id, pr);
+            _nav.NavigateTo("Prand");
+        }
+        // StateHasChanged();
+    }
+
+
+}

@@ -1,0 +1,36 @@
+﻿@page "/Prand"
+@inject NavigationManager _nav
+@inject IPrandService _IPrand
+
+
+<h1>list of prands!</h1>
+<button @onclick="Create" class="btn btn-primary">Create</button>
+<ul>
+    @foreach(var prand in prands)
+    {
+        <li>@prand.Name</li>
+        <button @onclick="@(()=>EditPrand(prand.Id))" class="btn btn-success">Edit</button>
+        <button @onclick="@(() => DeletePrand(prand.Id))" class="btn btn-danger">Delete</button>
+
+    }
+</ul>
+
+
+@code {
+    List<Entity.Prand> prands = new List<Entity.Prand>();
+
+    protected override async Task OnInitializedAsync() => prands = await _IPrand.GetPrandList();
+
+    public void Create() =>  _nav.NavigateTo("CreatePrand");
+
+    public void EditPrand(int id) => _nav.NavigateTo($"EditPrand/{id}");
+
+    async public void DeletePrand(int id)
+    {
+        await _IPrand.DeletePrand(id);
+        
+        prands = await _IPrand.GetPrandList();
+        StateHasChanged();
+    }
+
+}

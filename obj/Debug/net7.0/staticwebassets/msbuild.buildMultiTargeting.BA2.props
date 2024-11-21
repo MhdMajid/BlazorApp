@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\BA2.props" />
+</Project>

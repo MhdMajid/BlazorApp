@@ -1,0 +1,34 @@
+﻿@page "/Games"
+@inject IGameService _IGameService
+
+<PageTitle>Games</PageTitle>
+
+<h3>Games List</h3>
+@if (games == null)
+{
+    <span>Loading... </span>
+}
+else if (games.Count == 0)
+{
+    <span> no games found. </span>
+}
+else
+{
+    <ul>
+        @foreach (var game in games)
+        {
+             <li>@game.Name <EditGameButton Id="@game.Id" /> </li>
+        }
+    </ul>
+}
+ <CreateGame />
+
+@code {
+    List<Entity.Game>? games = new List<Entity.Game>();
+
+
+    protected override async Task OnInitializedAsync() => games = await _IGameService.GetAllGames();
+
+    
+     
+}

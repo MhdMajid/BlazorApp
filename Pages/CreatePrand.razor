@@ -1,0 +1,25 @@
+﻿@page "/CreatePrand"
+@inject IPrandService _IPrand
+@inject NavigationManager _nav
+
+<h3>CreatePrand</h3>
+<EditForm Model="prand" OnSubmit="HandleSubmit">
+    <label>Name</label>
+    <InputText @bind-Value="@prand.Name">@prand.Name</InputText>
+    <label>City</label>
+    <InputText @bind-Value="@prand.City">@prand.City</InputText>
+    <button type="submit" class="btn btn-success">Submit</button>
+</EditForm>
+
+@code {
+    Entity.Prand prand { get; set; } = new Entity.Prand{Name=String.Empty, City = String.Empty};
+
+    async Task HandleSubmit()
+    {
+        if (prand.Name != null && prand.City != null)
+        {
+            await _IPrand.CreatePrand(prand);
+            _nav.NavigateTo("Prand");
+        }
+    }
+}
